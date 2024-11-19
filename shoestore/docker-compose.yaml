@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  tomcat:
+    build: .
+    container_name: shoestore-tomcat
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./src/main/webapp:/usr/local/tomcat/webapps/ROOT
+    networks:
+      - shoestore-network
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    container_name: shoestore-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: zaidpeshkar
+      MYSQL_DATABASE: nike_store
+    volumes:
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - shoestore-network
+
+networks:
+  shoestore-network:
+    driver: bridge
